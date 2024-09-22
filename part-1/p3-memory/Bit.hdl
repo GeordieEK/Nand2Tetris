@@ -1,0 +1,24 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/3/a/Bit.hdl
+/**
+ * 1-bit register:
+ * If load is asserted, the register's value is set to in;
+ * Otherwise, the register maintains its current value:
+ * if (load(t)) out(t+1) = in(t), else out(t+1) = out(t)
+ */
+CHIP Bit {
+    IN in, load;
+    OUT out;
+
+    PARTS:
+    // Selecting between current and next value based on load value
+    // This Mux decides whether to update the register or keep its current value
+    Mux(a=next, b=in, sel=load, out=selectedValue);
+    
+    // D Flip-Flop (DFF) implements the storage mechanism
+    // It holds the value until the next clock tick
+    // The feedback loop creates persistence of the stored value
+    DFF(in=selectedValue, out=next, out=out);
+}
